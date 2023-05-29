@@ -1,0 +1,118 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>Follow-up</title>
+        <meta name="description" content=""/>
+        <meta name="keywords" content=""/>
+        <!-- Bootstrap -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+              rel="stylesheet"
+              integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+              crossorigin="anonymous"/>
+        <!-- Template Main CSS File -->
+        <link rel="stylesheet"
+              href="{{ request.scheme }}://{{ request.META.HTTP_HOST }}{% static 'main.css' %}"/>
+    </head>
+    <body class="bg-white p-4">
+        <table class="table table-light table-bordered">
+            <thead class="text-center">
+                <tr class="align-middle">
+                    <td rowspan="3">
+                        <img src="{{ request.scheme }}://{{ request.META.HTTP_HOST }}{% static "img/logo.png" %}"
+                             alt="logo"
+                             height="60"
+                             width=""/>
+                    </td>
+                    <th rowspan="2" colspan="6" class="fs-5">
+                        Seguimiento al entrenamiento y adaptación para
+                        {% if prothesis %}
+                            protesis
+                        {% else %}
+                            ortesis
+                        {% endif %}
+                        .
+                    </th>
+                    <td colspan="2">
+                        Código: SCEU-F-01-R
+                        {% if prothesis %}
+                            5
+                        {% else %}
+                            4
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">Versión: 2</td>
+                </tr>
+                <tr>
+                    <td colspan="2">Elaboró: Lider de calidad</td>
+                    <td colspan="2">Aprobó: Gerente</td>
+                    <td colspan="2">Aprobado: Jun-10 de 2022</td>
+                    <td colspan="2">Página 1 de 1</td>
+                </tr>
+            </thead>
+            <tbody class="border">
+                <tr>
+                    <td colspan="9">
+                        En el presente formato se deben relacionar todas las correcciones resultado del proceso de entrenamiento del paciente con el dispositivo elaborado:
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">Paciente:</td>
+                    <td colspan="2">{{ selected_patient.name }}</td>
+                    <td colspan="2">Documento:</td>
+                    <td colspan="2">{{ selected_patient.cc }}</td>
+                </tr>
+                <tr>
+                    <td colspan="2">Nombre del producto:</td>
+                    <td colspan="2">{{ selected_patient.product_name }}</td>
+                    <td colspan="2">Fecha de entrega:</td>
+                    <td colspan="2">{{ selected_patient.patientrecord_set.all.last }}</td>
+                </tr>
+                <tr class="text-center align-middle">
+                    <th>Fecha</th>
+                    <th colspan="2">Actividad</th>
+                    <th colspan="2">Observaciones</th>
+                    <th>Firma usuario</th>
+                    <th colspan="2">Tecnico atendio</th>
+                </tr>
+                {% for record in selected_patient.patientrecord_set.all %}
+                    <tr class="text-center align-middle">
+                        <td>{{ record.date }}</td>
+                        <td colspan="2">{{ record.requirement }}</td>
+                        <td colspan="2">{{ record.description }}</td>
+                        <td>
+                            {% if selected_patient.signature %}
+                                <img src="{{ selected_patient.signature.url }}"
+                                     alt="Firma del usuario"
+                                     height=""
+                                     width=""/>
+                            {% endif %}
+                        </td>
+                        <td colspan="2">Francisco Franco</td>
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <td colspan="9">Hace seguimiento a cada consulta:</td>
+                </tr>
+            </tbody>
+            <tfoot class="text-center border">
+                <tr>
+                    <td colspan="9">
+                        <img src="{{ request.scheme }}://{{ request.META.HTTP_HOST }}{% static "img/firma.png" %}"
+                             alt="firma"
+                             height="60"
+                             width=""/>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="9">Director técnico</td>
+                </tr>
+            </tfoot>
+        </table>
+    </body>
+</html>

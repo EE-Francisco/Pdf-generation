@@ -1,0 +1,84 @@
+<table class="table table-dark table-striped my-3">
+  <thead>
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">CC</th>
+      <th scope="col">Documents</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for patient in page_obj %}
+      <tr>
+        <td>{{ patient }}</td>
+        <td>{{ patient.cc }}</td>
+        <form>
+          <td>
+            {% for record in patient.patientrecord_set.all %}
+              <label>
+                <input type="checkbox" value={{ forloop.counter0 }} name="{{ patient }}"/>
+                {{ record }}
+              </label>
+            {% endfor %}
+            <label>
+              <input type="checkbox" value="traceability" name="{{ patient }}"/>
+              Traceability
+            </label>
+            <label>
+              <input type="checkbox" value="follow_up" name="{{ patient }}"/>
+              Follow-up
+            </label>
+          </td>
+          <td>
+            <input type="submit" value="Ver/Ocultar pdf" name="{{ patient }}"/>
+            <input type="submit" value="Generar pdf" name="{{ patient }}"/>
+          </td>
+        </form>
+      </tr>
+      {% if patient.name == selected_patient.name %}
+        {% if indices %}
+          <tr>
+            <td colspan="4">{% include "patient_record.html" %}</td>
+          </tr>
+        {% endif %}
+        {% if traceability %}
+          <tr>
+            <td colspan="4">{% include "traceability.html" %}</td>
+          </tr>
+        {% endif %}
+        {% if follow_up %}
+          <tr>
+            <td colspan="4">{% include "follow-up.html" %}</td>
+          </tr>
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+  </tbody>
+</table>
+{% if page_obj.has_other_pages %}
+  <ul class="pagination">
+    {% if page_obj.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">&laquo;</a>
+      </li>
+    {% endif %}
+    {% for num in page_obj.paginator.page_range %}
+      {% if page_obj.number == num %}
+        <li class="page-item active">
+          <a class="page-link" href="#">{{ num }} <span class="sr-only">(current)</span></a>
+        </li>
+      {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+        </li>
+      {% endif %}
+    {% endfor %}
+    {% if page_obj.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.next_page_number }}">&raquo;</a>
+      </li>
+    {% endif %}
+    <li class="page-link">{{ patient_list.count }} patients
+    </li>
+  </ul>
+{% endif %}

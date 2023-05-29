@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+{% block content %}
+    {% load static %}
+    <form>
+        <div>
+            <label for="searchbar">
+                <img src="{% static 'admin/img/search.svg' %}"
+                     alt="Search"
+                     height=""
+                     width=""/>
+            </label>
+            <input type="text"
+                   size="40"
+                   name="q"
+                   value=""
+                   id="searchbar"
+                   autofocus=""
+                   placeholder="Search..."/>
+            <input type="submit" value="Search"/>
+        </div>
+    </form>
+    {% if messages %}
+        <ul class="messages my-3">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    {% include "search_results.html" %}
+{% endblock content %}
